@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        table {
+            text-align: center;
+        }
+
+        th {
+            background-color: cadetblue;
+        }
+
+        input {
+            width: 25%;
+        }
+    </style>
+</head>
+<body>
+<h1>===================PRODUCT MANAGER===================</h1>
+<input type="text" id="create"><label>
+    <button onclick="createProduct()">Create</button>
+</label>
+<input type="text" id="search" oninput="searchProduct()"><label>
+    <button onclick="searchProduct()">Search</button>
+</label>
+<h3 id="validate"></h3>
+<table border="1" width="70%">
+    <tr style="height: 50px">
+        <th style="width: 10%">STT</th>
+        <th style="width: 50%">Product</th>
+        <th style="width: 10%">Edit Product</th>
+        <th style="width: 10%">DELETE</th>
+    </tr>
+    <tbody id="drawTable"></tbody>
+</table>
+<script>
+    let productList = ['T-Shirt', 'Dress', 'Jean', 'Hat', 'Shoes', 'Glasses']
+
+    function showProductList() {
+        let drawTable = ""
+        for (let i = 0; i < productList.length; i++) {
+            drawTable += `<tr style="height: 50px">
+<td>${i + 1}</td>
+<td>${productList[i]}</td>
+<td><button onclick="editProduct(${i})">Edit</button></td>
+<td><button onclick="deleteProduct(${i})">Delete</button></td>
+</tr>`
+        }
+        document.getElementById('drawTable').innerHTML = drawTable
+    }
+
+    showProductList()
+
+    function createProduct() {
+        let createProduct = document.getElementById('create').value;
+        if (createProduct.trim() === '') {
+            document.getElementById('validate').innerHTML = '<label style="color: red">Please try again!</label>'
+        } else {
+            productList.push(createProduct)
+            document.getElementById('validate').innerHTML = '<label style="color: olivedrab">Create Success</label>'
+            showProductList()
+        }
+    }
+
+    function editProduct(id) {
+        let edit = prompt('Enter the new product to update: ', 'Old Product: ' + productList[id])
+        if (edit.trim() === '') {
+            document.getElementById('validate').innerHTML = '<label style="color: red">Please try again!</label>'
+        } else if (edit === productList[id]) {
+            document.getElementById('validate').innerHTML = '<label style="color: red">A Product has already exists! Please try again!</label>'
+        } else {
+            productList[id] = edit
+            showProductList()
+        }
+    }
+
+    function deleteProduct(id) {
+        if (confirm('Are you sure that you want to delete?')) {
+            productList.splice(id, 1)
+            document.getElementById('validate').innerHTML = '<label style="color: olivedrab">Delete Success</label>'
+            showProductList()
+        } else {
+            document.getElementById('validate').innerHTML = '<label style="color: red">Oke</label>'
+        }
+    }
+
+    let listProductSearch = []
+
+    function searchProduct() {
+        listProductSearch = []
+        let search = document.getElementById('search').value;
+        if (search.trim() === '') {
+            showProductList()
+            return
+        } else {
+            for (let i = 0; i < productList.length; i++) {
+                if (productList[i].search(search) !== -1) {
+                    listProductSearch.push(productList[i])
+                }
+            }
+        }
+        showlistProductSearch()
+    }
+
+    function showlistProductSearch() {
+        let drawTable = ""
+        for (let i = 0; i < listProductSearch.length; i++) {
+            drawTable += `<tr>
+<td>${i + 1}</td>
+<td>${listProductSearch[i]}</td>
+<td><button onclick="editProduct(${i})">Edit</button></td>
+<td><button onclick="deleteProduct(${i})">Delete</button></td>
+</tr>`
+        }
+        document.getElementById('drawTable').innerHTML = drawTable
+    }
+
+
+</script>
+</body>
+</html>
